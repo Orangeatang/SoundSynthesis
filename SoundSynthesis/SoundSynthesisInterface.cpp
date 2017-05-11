@@ -1,0 +1,51 @@
+
+//////////////////////////////////////////////////////////////////////////
+/// Includes
+//////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "SoundSynthesisInterface.h"
+#include "Quantization.h"
+#include "PitchShift.h"
+#include "Helpers.h"
+
+
+//////////////////////////////////////////////////////////////////////////
+/// SoundSynthesisInterface
+//////////////////////////////////////////////////////////////////////////
+
+SoundSynthesisInterface::SoundSynthesisInterface()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+SoundSynthesisInterface::~SoundSynthesisInterface()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+SoundSynthesisInterface::!SoundSynthesisInterface()
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void SoundSynthesisInterface::QuantizeAudioFile( String^ anInputFileName, String^ anOutputFileName, int aSampleRate )
+{
+    std::shared_ptr<Quantization> quantizer( new Quantization(aSampleRate) );
+
+    quantizer->ProcessAudio( StringToChar(anInputFileName).myString, StringToChar(anOutputFileName).myString );
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void SoundSynthesisInterface::PitchShiftAudioFile( String^ anInputFileName, String^ anOutputFileName, double aPitchShiftFactor )
+{
+    std::shared_ptr<CPitchShift> pitchShifter( new CPitchShift(aPitchShiftFactor) );
+
+    pitchShifter->ProcessAudio( StringToChar(anInputFileName).myString, StringToChar(anOutputFileName).myString );
+}
+
+//////////////////////////////////////////////////////////////////////////
