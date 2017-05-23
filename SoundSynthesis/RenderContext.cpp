@@ -38,10 +38,14 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
     // fill in the swap chain structure
     swapChainDescription.BufferCount        = 2;
     swapChainDescription.BufferDesc.Format  = DXGI_FORMAT_R8G8B8A8_UNORM;
+    swapChainDescription.BufferDesc.Width   = aWindowWidth;
+    swapChainDescription.BufferDesc.Height  = aWindowHeight;
+    swapChainDescription.BufferDesc.RefreshRate.Numerator = 60;
+    swapChainDescription.BufferDesc.RefreshRate.Denominator = 1;
     swapChainDescription.BufferUsage        = DXGI_USAGE_RENDER_TARGET_OUTPUT;
     swapChainDescription.OutputWindow       = aWindowHandle;
     swapChainDescription.SampleDesc.Count   = 8;
-    swapChainDescription.SampleDesc.Quality = 1;
+    swapChainDescription.SampleDesc.Quality = 0;
     swapChainDescription.Windowed           = TRUE;
     swapChainDescription.Flags              = DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
@@ -50,7 +54,7 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
         NULL,
         D3D_DRIVER_TYPE_HARDWARE,
         NULL,
-        NULL,
+        0,
         NULL,
         NULL,
         D3D11_SDK_VERSION,
@@ -69,12 +73,19 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
 
     // get the address of the back buffer and use that as the render target
     ID3D11Texture2D* backBuffer = nullptr;
-    result = m_swapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)m_renderTarget );
+    result = m_swapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer );
     if( result != S_OK )
     {
         return false;
     }
+
+    // use the back-buffer address to create the render target
+    result = m_device->CreateRenderTargetView( backBuffer, NULL, &m_renderTarget );
     backBuffer->Release();
+    if( result != S_OK )
+    {
+        return false;
+    }
 
     // set the render target as the back buffer
     m_deviceContext->OMSetRenderTargets( 1, &m_renderTarget, nullptr );
@@ -90,7 +101,17 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
 
     m_deviceContext->RSSetViewports( 1, &viewport );
 
-    return false;
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CRenderContext::Clear()
+{
+    static const float color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
+    m_deviceContext->ClearRenderTargetView( m_renderTarget, color);
+
+    m_swapChain->Present(0, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -34,6 +34,8 @@ public :
 
     bool InitializeEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight );
 
+    void Update();
+
     //////////////////////////////////////////////////////////////////////////
 
     void QuantizeAudioFile( String^ anInputFileName, String^ anOutputFileName, int aSampleRate );

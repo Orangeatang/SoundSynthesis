@@ -2,9 +2,10 @@
 
 using System;
 using System.IO;
+using System.Timers;
 using System.Windows;
-using System.Windows.Forms;
 using System.Windows.Interop;
+using System.Windows.Forms;
 using System.Windows.Threading;
 
 using SoundWave.MediaPlayer;
@@ -14,6 +15,8 @@ using SoundWave.MediaPlayer;
 
 namespace SoundWave
 {
+    using Timer = System.Timers.Timer;
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -32,40 +35,58 @@ namespace SoundWave
         #endregion
 
 
-        #region UI Events
+        #region Application Events
+
+        /// <summary>
+        /// Triggered when the application is first loaded, sets up C++ rendering & engine update
+        /// </summary>
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            if( !SoundSynthesisInterface.Instance.InitializeEngine(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
+            {
+                return;
+            }
+
+            // create a timer to tick the engine
+            myTimer = new Timer(33);
+            myTimer.Elapsed += OnUpdateEngine;
+            myTimer.AutoReset = true;
+            myTimer.Enabled = true;
+        }
+
 
         /// <summary>
         /// triggered when the user clicks on the input file selection button
         /// </summary>
-        private void OnInputFileClicked( object aSender, RoutedEventArgs someArgs )
+        private void OnInputFileClicked(object aSender, RoutedEventArgs someArgs)
         {
-            OpenFileDialog fileDialog   = new OpenFileDialog();
-            fileDialog.Filter           = "WAV files (*.wav)|*.wav";
+            OpenFileDialog fileDialog = new OpenFileDialog();
+            fileDialog.Filter = "WAV files (*.wav)|*.wav";
             fileDialog.RestoreDirectory = true;
-            if( fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK )
+            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                myInputFileName         = fileDialog.FileName;
-                myInputFileText.Text    = Path.GetFileName( myInputFileName );
-                myOutputFileName        = Path.GetDirectoryName( myInputFileName ) + "\\" + Path.GetFileNameWithoutExtension( myInputFileName ) + " Output.wav";
+                myInputFileName = fileDialog.FileName;
+                myInputFileText.Text = Path.GetFileName(myInputFileName);
+                myOutputFileName = Path.GetDirectoryName(myInputFileName) + "\\" + Path.GetFileNameWithoutExtension(myInputFileName) + " Output.wav";
 
-                myOutputFileText.Text   = Path.GetFileName( myOutputFileName );
+                myOutputFileText.Text = Path.GetFileName(myOutputFileName);
 
                 EnableUI();
             }
-        }        
+        }
 
 
         /// <summary>
         /// triggers quantization conversion of input audio file
         /// </summary>
-        private void OnBeginQuantization( object aSender, RoutedEventArgs someArgs )
+        private void OnBeginQuantization(object aSender, RoutedEventArgs someArgs)
         {
-            if( myInputFileName.Length == 0 )
+            if (myInputFileName.Length == 0)
             {
                 return;
             }
 
-            if( myQuantizationBits.SelectedIndex == -1 )
+            if (myQuantizationBits.SelectedIndex == -1)
             {
                 return;
             }
@@ -75,27 +96,29 @@ namespace SoundWave
             // stop any output
             mySoundPlayer.Stop();
 
-            SetStatusBarText( "Processing Quantization..." );
-            SoundSynthesisInterface.Instance.QuantizeAudioFile( myInputFileName, myOutputFileName, (int)myQuantizationBits.SelectedItem );
-            SetStatusBarText( "Quantization Complete!" );
+            SetStatusBarText("Processing Quantization...");
+            SoundSynthesisInterface.Instance.QuantizeAudioFile(myInputFileName, myOutputFileName, (int)myQuantizationBits.SelectedItem);
+            SetStatusBarText("Quantization Complete!");
 
             EnableUI();
         }
+
 
         /// <summary>
         /// Changes the value of the pitch shift label
         /// </summary>
         private void OnPitchShiftValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if( myPitchShiftLabel != null )
+            if (myPitchShiftLabel != null)
             {
                 myPitchShiftLabel.Content = Math.Round(myPitchShiftFactor.Value, 3);
             }
         }
 
-        private void OnBeginPitchShift( object aSender, RoutedEventArgs someArgs )
+
+        private void OnBeginPitchShift(object aSender, RoutedEventArgs someArgs)
         {
-            if( myInputFileName.Length == 0 )
+            if (myInputFileName.Length == 0)
             {
                 return;
             }
@@ -104,9 +127,9 @@ namespace SoundWave
 
             mySoundPlayer.Stop();
 
-            SetStatusBarText( "Procesing Pitch Shift..." );
+            SetStatusBarText("Procesing Pitch Shift...");
             SoundSynthesisInterface.Instance.PitchShiftAudioFile(myInputFileName, myOutputFileName, Math.Round(myPitchShiftFactor.Value, 3));
-            SetStatusBarText( "Pitch Shift Complete!" );
+            SetStatusBarText("Pitch Shift Complete!");
 
             EnableUI();
         }
@@ -115,29 +138,35 @@ namespace SoundWave
         /// <summary>
         /// triggers playback of generated audio file
         /// </summary>
-        private void OnPlayOutput( object aSender, RoutedEventArgs someArgs )
+        private void OnPlayOutput(object aSender, RoutedEventArgs someArgs)
         {
             mySoundPlayer.Stop();
-            mySoundPlayer.PlayWav( myOutputFileName );
+            mySoundPlayer.PlayWav(myOutputFileName);
         }
-        
+
 
         /// <summary>
         /// triggers playback of the input audio file
         /// </summary>
-        private void OnPlayInput( object aSender, RoutedEventArgs someArgs )
+        private void OnPlayInput(object aSender, RoutedEventArgs someArgs)
         {
             mySoundPlayer.Stop();
-            mySoundPlayer.PlayWav( myInputFileName );
+            mySoundPlayer.PlayWav(myInputFileName);
         }
 
 
         /// <summary>
         /// stops playback of generated audio file
         /// </summary>
-        private void OnStopOutput( object aSender, RoutedEventArgs someArgs )
+        private void OnStopOutput(object aSender, RoutedEventArgs someArgs)
         {
             mySoundPlayer.Stop();
+        }
+
+
+        private void OnUpdateEngine(object aSender, ElapsedEventArgs someArgs)
+        {
+            SoundSynthesisInterface.Instance.Update();
         }
 
         #endregion
@@ -203,18 +232,12 @@ namespace SoundWave
 
         #region Private Member Variables
 
-        String      myInputFileName  = "";
-        String      myOutputFileName = "";
+        String      myInputFileName     = "";
+        String      myOutputFileName    = "";
+        Timer       myTimer             = null;
 
         SoundPlayer mySoundPlayer;
 
         #endregion
-
-        private void OnLoaded(object sender, RoutedEventArgs e)
-        {
-            //SoundSynthesisInterface.Instance.InitializeEngine(myDXControl.Handle, (int)myEngineWindow.Width, (int)myEngineWindow.Height);
-            HwndSource hwndSource = (HwndSource)HwndSource.FromVisual(myDXControl);
-            SoundSynthesisInterface.Instance.InitializeEngine(hwndSource.Handle, (int)myDXControl.Width, (int)myDXControl.Height);
-        }
     }
 }

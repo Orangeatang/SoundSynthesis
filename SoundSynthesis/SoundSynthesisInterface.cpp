@@ -48,7 +48,21 @@ bool SoundSynthesisInterface::InitializeEngine( IntPtr aWindowHandle, int aWindo
         return false;
     }
 
+    m_engine->Update();
+
     return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void SoundSynthesisInterface::Update()
+{
+    if( !m_engine->IsInitialized() )
+    {
+        return;
+    }
+
+    m_engine->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////
