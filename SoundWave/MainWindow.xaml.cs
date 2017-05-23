@@ -60,19 +60,19 @@ namespace SoundWave
         /// </summary>
         private void OnInputFileClicked(object aSender, RoutedEventArgs someArgs)
         {
-            OpenFileDialog fileDialog = new OpenFileDialog();
-            fileDialog.Filter = "WAV files (*.wav)|*.wav";
-            fileDialog.RestoreDirectory = true;
-            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                myInputFileName = fileDialog.FileName;
-                myInputFileText.Text = Path.GetFileName(myInputFileName);
-                myOutputFileName = Path.GetDirectoryName(myInputFileName) + "\\" + Path.GetFileNameWithoutExtension(myInputFileName) + " Output.wav";
-
-                myOutputFileText.Text = Path.GetFileName(myOutputFileName);
-
-                EnableUI();
-            }
+//             OpenFileDialog fileDialog = new OpenFileDialog();
+//             fileDialog.Filter = "WAV files (*.wav)|*.wav";
+//             fileDialog.RestoreDirectory = true;
+//             if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+//             {
+//                 myInputFileName = fileDialog.FileName;
+//                 myInputFileText.Text = Path.GetFileName(myInputFileName);
+//                 myOutputFileName = Path.GetDirectoryName(myInputFileName) + "\\" + Path.GetFileNameWithoutExtension(myInputFileName) + " Output.wav";
+// 
+//                 myOutputFileText.Text = Path.GetFileName(myOutputFileName);
+// 
+//                 EnableUI();
+//             }
         }
 
 
@@ -81,26 +81,26 @@ namespace SoundWave
         /// </summary>
         private void OnBeginQuantization(object aSender, RoutedEventArgs someArgs)
         {
-            if (myInputFileName.Length == 0)
-            {
-                return;
-            }
-
-            if (myQuantizationBits.SelectedIndex == -1)
-            {
-                return;
-            }
-
-            DisableUI();
-
-            // stop any output
-            mySoundPlayer.Stop();
-
-            SetStatusBarText("Processing Quantization...");
-            SoundSynthesisInterface.Instance.QuantizeAudioFile(myInputFileName, myOutputFileName, (int)myQuantizationBits.SelectedItem);
-            SetStatusBarText("Quantization Complete!");
-
-            EnableUI();
+//             if (myInputFileName.Length == 0)
+//             {
+//                 return;
+//             }
+// 
+//             if (myQuantizationBits.SelectedIndex == -1)
+//             {
+//                 return;
+//             }
+// 
+//             DisableUI();
+// 
+//             // stop any output
+//             mySoundPlayer.Stop();
+// 
+//             SetStatusBarText("Processing Quantization...");
+//             SoundSynthesisInterface.Instance.QuantizeAudioFile(myInputFileName, myOutputFileName, (int)myQuantizationBits.SelectedItem);
+//             SetStatusBarText("Quantization Complete!");
+// 
+//             EnableUI();
         }
 
 
@@ -109,29 +109,29 @@ namespace SoundWave
         /// </summary>
         private void OnPitchShiftValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (myPitchShiftLabel != null)
-            {
-                myPitchShiftLabel.Content = Math.Round(myPitchShiftFactor.Value, 3);
-            }
+//             if (myPitchShiftLabel != null)
+//             {
+//                 myPitchShiftLabel.Content = Math.Round(myPitchShiftFactor.Value, 3);
+//             }
         }
 
 
         private void OnBeginPitchShift(object aSender, RoutedEventArgs someArgs)
         {
-            if (myInputFileName.Length == 0)
-            {
-                return;
-            }
-
-            DisableUI();
-
-            mySoundPlayer.Stop();
-
-            SetStatusBarText("Procesing Pitch Shift...");
-            SoundSynthesisInterface.Instance.PitchShiftAudioFile(myInputFileName, myOutputFileName, Math.Round(myPitchShiftFactor.Value, 3));
-            SetStatusBarText("Pitch Shift Complete!");
-
-            EnableUI();
+//             if (myInputFileName.Length == 0)
+//             {
+//                 return;
+//             }
+// 
+//             DisableUI();
+// 
+//             mySoundPlayer.Stop();
+// 
+//             SetStatusBarText("Procesing Pitch Shift...");
+//             SoundSynthesisInterface.Instance.PitchShiftAudioFile(myInputFileName, myOutputFileName, Math.Round(myPitchShiftFactor.Value, 3));
+//             SetStatusBarText("Pitch Shift Complete!");
+// 
+//             EnableUI();
         }
 
 
@@ -140,8 +140,8 @@ namespace SoundWave
         /// </summary>
         private void OnPlayOutput(object aSender, RoutedEventArgs someArgs)
         {
-            mySoundPlayer.Stop();
-            mySoundPlayer.PlayWav(myOutputFileName);
+//             mySoundPlayer.Stop();
+//             mySoundPlayer.PlayWav(myOutputFileName);
         }
 
 
@@ -150,8 +150,8 @@ namespace SoundWave
         /// </summary>
         private void OnPlayInput(object aSender, RoutedEventArgs someArgs)
         {
-            mySoundPlayer.Stop();
-            mySoundPlayer.PlayWav(myInputFileName);
+//             mySoundPlayer.Stop();
+//             mySoundPlayer.PlayWav(myInputFileName);
         }
 
 
@@ -160,7 +160,7 @@ namespace SoundWave
         /// </summary>
         private void OnStopOutput(object aSender, RoutedEventArgs someArgs)
         {
-            mySoundPlayer.Stop();
+            //mySoundPlayer.Stop();
         }
 
 
@@ -179,13 +179,13 @@ namespace SoundWave
         /// </summary>
         private void SetupQuantization()
         {
-            for( int i = 1; i < 16; ++i )
-            {
-                myQuantizationBits.Items.Add( i );
-            }
-
-            myQuantizationBits.SelectedIndex    = 0;
-            myBeginQuantizationButton.IsEnabled = false;
+//             for( int i = 1; i < 16; ++i )
+//             {
+//                 myQuantizationBits.Items.Add( i );
+//             }
+// 
+//             myQuantizationBits.SelectedIndex    = 0;
+//             myBeginQuantizationButton.IsEnabled = false;
         }
 
         /// <summary>
@@ -193,8 +193,8 @@ namespace SoundWave
         /// </summary>
         private void EnableUI()
         {
-            myBeginQuantizationButton.IsEnabled = true;
-            myBeginPitchShiftButton.IsEnabled = true;
+//             myBeginQuantizationButton.IsEnabled = true;
+//             myBeginPitchShiftButton.IsEnabled = true;
         }
 
         
@@ -203,8 +203,8 @@ namespace SoundWave
         /// </summary>
         private void DisableUI()
         {
-            myBeginQuantizationButton.IsEnabled = false;
-            myBeginPitchShiftButton.IsEnabled = false;
+//             myBeginQuantizationButton.IsEnabled = false;
+//             myBeginPitchShiftButton.IsEnabled = false;
         }
 
 
@@ -213,7 +213,7 @@ namespace SoundWave
         /// </summary>
         private void SetStatusBarText( string someText )
         {
-            m_statusBarText.Text = someText;
+            //m_statusBarText.Text = someText;
 
             // force the UI to refresh
             DispatcherFrame frame = new DispatcherFrame();
