@@ -4,6 +4,7 @@ using System;
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Interop;
 using System.Windows.Threading;
 
 using SoundWave.MediaPlayer;
@@ -25,7 +26,6 @@ namespace SoundWave
             InitializeComponent();
 
             mySoundPlayer = new SoundPlayer();
-            
             SetupQuantization();
         }
 
@@ -209,5 +209,12 @@ namespace SoundWave
         SoundPlayer mySoundPlayer;
 
         #endregion
+
+        private void OnLoaded(object sender, RoutedEventArgs e)
+        {
+            //SoundSynthesisInterface.Instance.InitializeEngine(myDXControl.Handle, (int)myEngineWindow.Width, (int)myEngineWindow.Height);
+            HwndSource hwndSource = (HwndSource)HwndSource.FromVisual(myDXControl);
+            SoundSynthesisInterface.Instance.InitializeEngine(hwndSource.Handle, (int)myDXControl.Width, (int)myDXControl.Height);
+        }
     }
 }

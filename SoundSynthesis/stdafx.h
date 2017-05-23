@@ -3,6 +3,7 @@
 /// Includes
 //////////////////////////////////////////////////////////////////////////
 
+// standard libs
 #include <memory>
 #include <stdio.h>
 #include <string.h>
@@ -11,5 +12,11 @@
 #include <vcclr.h>
 #include <cassert>
 #include <vector>
+
+// directx
+#include <windows.h>
+#include <windowsx.h>
+#include <d3d11.h>
+#include <DirectXMath.h>
 
 //////////////////////////////////////////////////////////////////////////

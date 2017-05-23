@@ -5,6 +5,8 @@
 
 #include "stdafx.h"
 #include "SoundSynthesisInterface.h"
+#include "Engine.h"
+
 #include "Quantization.h"
 #include "PitchShift.h"
 #include "Helpers.h"
@@ -14,7 +16,8 @@
 /// SoundSynthesisInterface
 //////////////////////////////////////////////////////////////////////////
 
-SoundSynthesisInterface::SoundSynthesisInterface()
+SoundSynthesisInterface::SoundSynthesisInterface() :
+    m_engine( nullptr )
 {
 }
 
@@ -28,6 +31,24 @@ SoundSynthesisInterface::~SoundSynthesisInterface()
 
 SoundSynthesisInterface::!SoundSynthesisInterface()
 {
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool SoundSynthesisInterface::InitializeEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
+{
+    if( m_engine != nullptr )
+    {
+        return m_engine->IsInitialized();
+    }
+
+    m_engine = new CEngine();
+    if( !m_engine->Initialize((HWND)aWindowHandle.ToPointer(), aWindowWidth, aWindowHeight) )
+    {
+        return false;
+    }
+
+    return true;
 }
 
 //////////////////////////////////////////////////////////////////////////

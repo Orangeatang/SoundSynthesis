@@ -16,6 +16,12 @@
     <Filter Include="Precompiled">
       <UniqueIdentifier>{b701c07e-aab8-463a-ae5b-931c97d51962}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{4c54f47a-29cf-4e07-b38e-c923fc74fe89}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Rendering">
+      <UniqueIdentifier>{63465a14-9490-4d1f-b142-93d09ba71807}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SoundSynthesisInterface.h" />
@@ -37,6 +43,12 @@
     <ClInclude Include="stdafx.h">
       <Filter>Precompiled</Filter>
     </ClInclude>
+    <ClInclude Include="RenderContext.h">
+      <Filter>Engine\Rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="Engine.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoundSynthesisInterface.cpp" />
@@ -54,6 +66,12 @@
     </ClCompile>
     <ClCompile Include="stdafx.cpp">
       <Filter>Precompiled</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderContext.cpp">
+      <Filter>Engine\Rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
+      <Filter>Engine</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
