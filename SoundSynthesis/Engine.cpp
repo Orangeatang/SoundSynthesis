@@ -5,7 +5,9 @@
 
 #include "stdafx.h"
 #include "Engine.h"
+
 #include "RenderContext.h"
+#include "SoundSystem.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -13,8 +15,9 @@
 //////////////////////////////////////////////////////////////////////////
 
 CEngine::CEngine() :
-    m_renderContext( nullptr ),
-    m_initialised( false )
+    myRenderContext( nullptr ),
+    mySoundSystem( nullptr ),
+    myInitialised( false )
 {
 }
 
@@ -22,25 +25,35 @@ CEngine::CEngine() :
 
 CEngine::~CEngine()
 {
+    delete myRenderContext;
+    delete mySoundSystem;
+    myInitialised = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CEngine::Initialize( HWND aWindowHandle, int aWindowWidth, int aWindowHeight )
+bool CEngine::Initialise( HWND aWindowHandle, int aWindowWidth, int aWindowHeight )
 {
-    if( m_initialised )
+    if( myInitialised )
     {
         return true;
     }
 
     // create the directx renderer
-    m_renderContext = new CRenderContext();
-    if( !m_renderContext->Initialize(aWindowHandle, aWindowWidth, aWindowHeight) )
+    myRenderContext = new CRenderContext();
+    if( !myRenderContext->Initialize(aWindowHandle, aWindowWidth, aWindowHeight) )
     {
         return false;
     }
 
-    m_initialised = true;
+    // create the sound system
+    mySoundSystem = new CSoundSystem();
+    if( !mySoundSystem->Initialise() )
+    {
+        return false;
+    }
+
+    myInitialised = true;
     return true;
 }
 
@@ -48,7 +61,7 @@ bool CEngine::Initialize( HWND aWindowHandle, int aWindowWidth, int aWindowHeigh
 
 void CEngine::Update()
 {
-    if( !m_initialised )
+    if( !myInitialised )
     {
         return;
     }
@@ -60,19 +73,19 @@ void CEngine::Update()
 
 bool CEngine::IsInitialized() const
 {
-    return m_initialised;
+    return myInitialised;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 void CEngine::Render()
 {
-    if( !m_initialised )
+    if( !myInitialised )
     {
         return;
     }
 
-    m_renderContext->Clear();
+    myRenderContext->Clear();
 }
 
 //////////////////////////////////////////////////////////////////////////

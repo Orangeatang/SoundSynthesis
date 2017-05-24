@@ -24,10 +24,12 @@ private :
 
     //////////////////////////////////////////////////////////////////////////
 
-    IDXGISwapChain*         m_swapChain;
-    ID3D11Device*           m_device;
-    ID3D11DeviceContext*    m_deviceContext;
-    ID3D11RenderTargetView* m_renderTarget;
+    IDXGISwapChain*         mySwapChain;
+    ID3D11Device*           myDevice;
+    ID3D11DeviceContext*    myDeviceContext;
+    ID3D11RenderTargetView* myRenderTarget;
+
+    bool                    myInitialized;
 };
 
 //////////////////////////////////////////////////////////////////////////

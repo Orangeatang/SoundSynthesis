@@ -12,10 +12,11 @@
 //////////////////////////////////////////////////////////////////////////
 
 CRenderContext::CRenderContext() :
-    m_device( nullptr ),
-    m_deviceContext( nullptr ),
-    m_swapChain( nullptr ),
-    m_renderTarget( nullptr )
+    myDevice( nullptr ),
+    myDeviceContext( nullptr ),
+    mySwapChain( nullptr ),
+    myRenderTarget( nullptr ),
+    myInitialized( false )
 {
 }
 
@@ -23,12 +24,24 @@ CRenderContext::CRenderContext() :
 
 CRenderContext::~CRenderContext()
 {
+    if( myInitialized )
+    {
+        myRenderTarget->Release();
+        mySwapChain->Release();
+        myDeviceContext->Release();
+        myDevice->Release();
+    }
 }
 
 //////////////////////////////////////////////////////////////////////////
 
 bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWindowHeight )
 {
+    if( myInitialized )
+    {
+        return true;
+    }
+
     // create a structure to hold information about the swap chain
     DXGI_SWAP_CHAIN_DESC swapChainDescription;
     ZeroMemory( &swapChainDescription, sizeof(DXGI_SWAP_CHAIN_DESC) );
@@ -59,10 +72,10 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
         NULL,
         D3D11_SDK_VERSION,
         &swapChainDescription,
-        &m_swapChain,
-        &m_device,
+        &mySwapChain,
+        &myDevice,
         NULL,
-        &m_deviceContext
+        &myDeviceContext
     );
 
     // bail out if we are unable to initialize the directx context
@@ -73,14 +86,14 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
 
     // get the address of the back buffer and use that as the render target
     ID3D11Texture2D* backBuffer = nullptr;
-    result = m_swapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer );
+    result = mySwapChain->GetBuffer( 0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBuffer );
     if( result != S_OK )
     {
         return false;
     }
 
     // use the back-buffer address to create the render target
-    result = m_device->CreateRenderTargetView( backBuffer, NULL, &m_renderTarget );
+    result = myDevice->CreateRenderTargetView( backBuffer, NULL, &myRenderTarget );
     backBuffer->Release();
     if( result != S_OK )
     {
@@ -88,7 +101,7 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
     }
 
     // set the render target as the back buffer
-    m_deviceContext->OMSetRenderTargets( 1, &m_renderTarget, nullptr );
+    myDeviceContext->OMSetRenderTargets( 1, &myRenderTarget, nullptr );
 
     // set the viewport
     D3D11_VIEWPORT viewport;
@@ -99,8 +112,9 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
     viewport.Width      = (FLOAT)aWindowWidth;
     viewport.Height     = (FLOAT)aWindowHeight;
 
-    m_deviceContext->RSSetViewports( 1, &viewport );
+    myDeviceContext->RSSetViewports( 1, &viewport );
 
+    myInitialized = true;
     return true;
 }
 
@@ -109,9 +123,9 @@ bool CRenderContext::Initialize( HWND aWindowHandle, int aWindowWidth, int aWind
 void CRenderContext::Clear()
 {
     static const float color[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
-    m_deviceContext->ClearRenderTargetView( m_renderTarget, color);
+    myDeviceContext->ClearRenderTargetView( myRenderTarget, color);
 
-    m_swapChain->Present(0, 0);
+    mySwapChain->Present(0, 0);
 }
 
 //////////////////////////////////////////////////////////////////////////

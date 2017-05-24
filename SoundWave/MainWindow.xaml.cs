@@ -32,10 +32,6 @@ namespace SoundWave
 
         public MainWindow()
         {
-            InitializeComponent();
-
-            mySoundPlayer = new SoundPlayer();
-            SetupQuantization();
         }
 
         #endregion
@@ -48,7 +44,7 @@ namespace SoundWave
         /// </summary>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if( !SoundSynthesisInterface.Instance.InitializeEngine(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
+            if( !SoundSynthesisInterface.Instance.InitialiseEngine(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
             {
                 return;
             }

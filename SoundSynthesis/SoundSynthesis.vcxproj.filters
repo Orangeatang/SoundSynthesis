@@ -22,6 +22,9 @@
     <Filter Include="Engine\Rendering">
       <UniqueIdentifier>{63465a14-9490-4d1f-b142-93d09ba71807}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Engine\Audio">
+      <UniqueIdentifier>{fc3b5c1e-6d75-4ec4-a1d9-1cb3bf6f5c28}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SoundSynthesisInterface.h" />
@@ -49,6 +52,9 @@
     <ClInclude Include="Engine.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Engine\Audio</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SoundSynthesisInterface.cpp" />
@@ -72,6 +78,9 @@
     </ClCompile>
     <ClCompile Include="Engine.cpp">
       <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Engine\Audio</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

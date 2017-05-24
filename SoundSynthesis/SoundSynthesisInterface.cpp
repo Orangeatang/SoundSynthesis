@@ -17,7 +17,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 SoundSynthesisInterface::SoundSynthesisInterface() :
-    m_engine( nullptr )
+    myEngine( nullptr )
 {
 }
 
@@ -35,20 +35,20 @@ SoundSynthesisInterface::!SoundSynthesisInterface()
 
 //////////////////////////////////////////////////////////////////////////
 
-bool SoundSynthesisInterface::InitializeEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
+bool SoundSynthesisInterface::InitialiseEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
 {
-    if( m_engine != nullptr )
+    if( myEngine != nullptr )
     {
-        return m_engine->IsInitialized();
+        return myEngine->IsInitialized();
     }
 
-    m_engine = new CEngine();
-    if( !m_engine->Initialize((HWND)aWindowHandle.ToPointer(), aWindowWidth, aWindowHeight) )
+    myEngine = new CEngine();
+    if( !myEngine->Initialise((HWND)aWindowHandle.ToPointer(), aWindowWidth, aWindowHeight) )
     {
         return false;
     }
 
-    m_engine->Update();
+    myEngine->Update();
 
     return true;
 }
@@ -57,12 +57,12 @@ bool SoundSynthesisInterface::InitializeEngine( IntPtr aWindowHandle, int aWindo
 
 void SoundSynthesisInterface::Update()
 {
-    if( !m_engine->IsInitialized() )
+    if( !myEngine->IsInitialized() )
     {
         return;
     }
 
-    m_engine->Update();
+    myEngine->Update();
 }
 
 //////////////////////////////////////////////////////////////////////////

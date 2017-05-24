@@ -32,7 +32,7 @@ public :
 
     //////////////////////////////////////////////////////////////////////////
 
-    bool InitializeEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight );
+    bool InitialiseEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight );
 
     void Update();
 
@@ -66,7 +66,7 @@ private :
 
     //////////////////////////////////////////////////////////////////////////
 
-    CEngine* m_engine;
+    CEngine* myEngine;
 
     //////////////////////////////////////////////////////////////////////////
 
