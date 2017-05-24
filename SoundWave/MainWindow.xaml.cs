@@ -15,7 +15,13 @@ using SoundWave.MediaPlayer;
 
 namespace SoundWave
 {
-    using Timer = System.Timers.Timer;
+    #region Resolve Ambiguities 
+
+    using Timer         = System.Timers.Timer;
+    using Application   = System.Windows.Application;
+
+    #endregion
+
 
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -52,6 +58,15 @@ namespace SoundWave
             myTimer.Elapsed += OnUpdateEngine;
             myTimer.AutoReset = true;
             myTimer.Enabled = true;
+        }
+
+
+        /// <summary>
+        /// handles cleanup of the application
+        /// </summary>
+        private void OnExit( object aSender, EventArgs someArges )
+        {
+            Application.Current.Shutdown( 0 );
         }
 
 
