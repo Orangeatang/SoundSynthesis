@@ -32,7 +32,8 @@ public :
 
     //////////////////////////////////////////////////////////////////////////
 
-    bool InitialiseEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight );
+    bool Initialise( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight );
+	void Uninitialise();
 
     void Update();
 

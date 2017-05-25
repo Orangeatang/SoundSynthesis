@@ -35,7 +35,7 @@ SoundSynthesisInterface::!SoundSynthesisInterface()
 
 //////////////////////////////////////////////////////////////////////////
 
-bool SoundSynthesisInterface::InitialiseEngine( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
+bool SoundSynthesisInterface::Initialise( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
 {
     if( myEngine != nullptr )
     {
@@ -48,9 +48,15 @@ bool SoundSynthesisInterface::InitialiseEngine( IntPtr aWindowHandle, int aWindo
         return false;
     }
 
-    myEngine->Update();
-
     return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void SoundSynthesisInterface::Uninitialise()
+{
+	delete myEngine;
+	ourInstance = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////

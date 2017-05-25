@@ -22,6 +22,12 @@ CSoundSystem::CSoundSystem() :
 
 CSoundSystem::~CSoundSystem()
 {
+	if( myInitialised )
+	{
+		myMasteringVoice->DestroyVoice();
+		myAudioInterface->Release();
+		myInitialised = false;
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

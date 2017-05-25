@@ -32,6 +32,9 @@ namespace SoundWave
 
         public MainWindow()
         {
+            InitializeComponent();
+
+            Application.Current.Exit += OnExit;
         }
 
         #endregion
@@ -44,7 +47,7 @@ namespace SoundWave
         /// </summary>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if( !SoundSynthesisInterface.Instance.InitialiseEngine(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
+            if( !SoundSynthesisInterface.Instance.Initialise(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
             {
                 return;
             }
@@ -62,6 +65,9 @@ namespace SoundWave
         /// </summary>
         private void OnExit( object aSender, EventArgs someArges )
         {
+            myTimer.Stop();
+            SoundSynthesisInterface.Instance.Uninitialise();
+
             Application.Current.Shutdown( 0 );
         }
 
