@@ -5,20 +5,20 @@
 
 // standard libs
 #include <memory>
-#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <math.h>
 #include <vcclr.h>
 #include <cassert>
 #include <vector>
 
-// directx
+// windows
 #include <windows.h>
-#include <windowsx.h>
+#include <tchar.h>
+#include <rpc.h>
+
+// directx
 #include <d3d11.h>
 #include <DirectXMath.h>
-
 #include <xaudio2.h>
 
 //////////////////////////////////////////////////////////////////////////

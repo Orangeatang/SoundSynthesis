@@ -1,0 +1,64 @@
+
+//////////////////////////////////////////////////////////////////////////
+/// Inculdes
+//////////////////////////////////////////////////////////////////////////
+
+#include "stdafx.h"
+#include "AudioSource.h"
+#include "SoundSystem.h"
+
+
+//////////////////////////////////////////////////////////////////////////
+/// CAudioSource
+//////////////////////////////////////////////////////////////////////////
+
+CAudioSource::CAudioSource( CSoundSystem* aSoundSystem, UINT32 someFlags ) : IAudioObject( aSoundSystem, someFlags ),
+    myVoice( nullptr )
+{
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+CAudioSource::~CAudioSource()
+{
+    delete myAudioBuffer;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+IXAudio2SourceVoice* CAudioSource::GetVoice() const
+{
+    return myVoice;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+XAUDIO2_BUFFER* CAudioSource::GetBuffer() const
+{
+    return myAudioBuffer;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+void CAudioSource::InitializeBuffer( UINT32 aByteCount, UINT32 someFlags )
+{
+    myAudioBuffer = new XAUDIO2_BUFFER();
+    myAudioBuffer->AudioBytes   = aByteCount;
+    myAudioBuffer->Flags        = someFlags;
+    myAudioBuffer->pAudioData   = new BYTE[myAudioBuffer->AudioBytes];
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CAudioSource::CreateVoice()
+{
+    IXAudio2* xaudio2 = mySoundSystem->GetInterface();
+    assert( xaudio2 != nullptr );
+
+    HRESULT result = xaudio2->CreateSourceVoice( &myVoice, &myWaveFormat, myVoiceFlags );
+    assert( result == S_OK );
+
+    return (result == S_OK);
+}
+
+//////////////////////////////////////////////////////////////////////////

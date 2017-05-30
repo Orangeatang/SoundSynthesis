@@ -5,37 +5,25 @@
 
 #include "stdafx.h"
 #include "WavFile.h"
+#include "SoundSystem.h"
 
 
 //////////////////////////////////////////////////////////////////////////
-/// SWavHeader
+/// Defines
 //////////////////////////////////////////////////////////////////////////
 
-SWavHeader::SWavHeader() :
-    m_fileLength( 0 ),
-    m_blockSize( 0 ),
-    m_formatTag( 0 ),
-    m_channelCount( 0 ),
-    m_samplesPerSecond( 0 ),
-    m_bytesPerSecond( 0 ),
-    m_bytesPerSample( 0 ),
-    m_bitsPerSample( 0 ),
-    m_dataLength( 0 )
-{
-    memset( &m_riff, 0, sizeof(char) * WAV_HEADER_BLOCK_LENGTH );
-    memset( &m_wave, 0, sizeof(char) * WAV_HEADER_BLOCK_LENGTH );
-    memset( &m_format, 0, sizeof(char) * WAV_HEADER_BLOCK_LENGTH );
-    memset( &m_dataLength, 0, sizeof(char) * WAV_HEADER_BLOCK_LENGTH );
-}
+#define RIFF    'RIFF'
+#define DATA    'DATA'
+#define FMT     'fmt'
+#define WAVE    'WAVE'
+#define DPDS    'dpds'
 
 
 //////////////////////////////////////////////////////////////////////////
 /// CWavFile
 //////////////////////////////////////////////////////////////////////////
 
-CWavFile::CWavFile() :
-    m_wavData( nullptr ),
-    m_isValid( false )
+CWavFile::CWavFile( CSoundSystem* aSoundSystem ) : CAudioSource( aSoundSystem )
 {
 }
 
@@ -43,117 +31,179 @@ CWavFile::CWavFile() :
 
 CWavFile::~CWavFile()
 {
-    delete m_wavData;
-    m_isValid = false;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CWavFile::Open( const char* aFileName )
+bool CWavFile::Load( const char* aFileName )
 {
-    FILE* inputFile;
+    // create a file handle
+    const TCHAR* fileName = _TEXT(aFileName);
 
-    errno_t errorCode = fopen_s( &inputFile, aFileName, "rb" );
-    if( errorCode != 0 )
+    HANDLE fileHandle = CreateFile( fileName, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr );
+    if( fileHandle == INVALID_HANDLE_VALUE )
     {
         return false;
     }
 
-    // read in the .wav header
-    size_t dataRead = fread( &m_wavHeader, 1, sizeof(SWavHeader), inputFile );
-    if( m_wavHeader.m_dataLength == 0 || dataRead != sizeof(SWavHeader) )
+    DWORD result = SetFilePointer( fileHandle, 0, nullptr, FILE_BEGIN );
+    if( result == INVALID_SET_FILE_POINTER )
     {
         return false;
     }
 
-    // read in the .wav data
-    m_sampleCount       = m_wavHeader.m_dataLength / m_wavHeader.m_bytesPerSample;
-    m_wavData           = new short[m_sampleCount];
-    dataRead            = fread( m_wavData, sizeof(short), m_sampleCount, inputFile );
-    if( dataRead != m_sampleCount )
+    // locate the 'RIFF' chunk and load it in to the WAVEFORMATEXTENSIBLE structure
+    DWORD chunkSize     = 0;
+    DWORD chunkPosition = 0;
+    if( !FindChunk(fileHandle, RIFF, chunkSize, chunkPosition) )
     {
         return false;
     }
 
-    // close the input file
-    fclose( inputFile );
+    // read in the type of file from the 'RIFF' chunk
+    DWORD fileType;
+    if( !ReadChunkData(fileHandle, &fileType, sizeof(DWORD), chunkPosition) )
+    {
+        return false;
+    }
 
-    m_isValid = true;
+    // make sure we're trying to read in a .wav file
+    if( fileType != WAVE )
+    {
+        return false;
+    }
+
+    // locate and read the 'fmt' chunk, which contains all of the wav format data
+    if( !FindChunk(fileHandle, FMT, chunkSize, chunkPosition) )
+    {
+        return false;
+    }
+
+    if( !ReadChunkData(fileHandle, &myWaveFormatEx, chunkSize, chunkPosition) )
+    {
+        return false;
+    }
+
+    // locate and read the 'data' chunk
+    if( !FindChunk(fileHandle, DATA, chunkSize, chunkPosition) )
+    {
+        return false;
+    }
+
+    // create the audio buffer and read the chunk data in to it
+    InitializeBuffer( chunkSize, XAUDIO2_END_OF_STREAM );
+    if( !ReadChunkData( fileHandle, (void*)myAudioBuffer->pAudioData, chunkSize, chunkPosition) )
+    {
+        return false;
+    }
+
     return true;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CWavFile::Save( const char* aFileName )
+bool CWavFile::CreateVoice()
 {
-    FILE* outputFile;
+    IXAudio2* xaudio2 = mySoundSystem->GetInterface();
+    assert( xaudio2 != nullptr );
 
-    errno_t errorCode = fopen_s( &outputFile, aFileName, "wb" );
-    if( errorCode != 0 )  
+    HRESULT result = xaudio2->CreateSourceVoice( &myVoice, &myWaveFormatEx.Format, myVoiceFlags );
+    assert( result == S_OK );
+
+    return (result == S_OK);
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CWavFile::FindChunk( HANDLE aFileHandle, DWORD aChunk, DWORD& aChunkSize, DWORD& aChunkPosition ) const
+{
+    // set the file handle to point to the beggining of the file
+    if( SetFilePointer(aFileHandle, 0, nullptr, FILE_BEGIN) == INVALID_SET_FILE_POINTER )
     {
         return false;
     }
 
-    // output the header
-    fwrite( &m_wavHeader, 1, sizeof(SWavHeader), outputFile );
+    HRESULT result          = S_OK;
+    DWORD   chunkType       = 0;
+    DWORD   chunkSize       = 0;
+    DWORD   currentOffset   = 0;
+    DWORD   totalData       = 0;
+    DWORD   fileType        = 0;
+    
+    // look through the file for the requested chunk
+    while( result == S_OK )
+    {
+        // read in the chunk type
+        DWORD dataRead;
+        if( ReadFile(aFileHandle, &chunkType, sizeof(DWORD), &dataRead, nullptr) == FALSE )
+        {
+            result = HRESULT_FROM_WIN32( GetLastError() );
+        }
 
-    // output the wav data
-    fwrite( m_wavData, sizeof(short), GetSampleCount(), outputFile );
+        // read in the chunk size
+        if( ReadFile(aFileHandle, &chunkSize, sizeof(DWORD), &dataRead, nullptr) == FALSE )
+        {
+            result = HRESULT_FROM_WIN32( GetLastError() );
+        }
 
-    // close the output file
-    fclose( outputFile );
+        // move the file pointer to the end of the chunk data
+        switch( chunkType )
+        {
+            // the RIFF chunk hold the total data size for the file
+        case RIFF:
+            totalData = chunkSize;
+            chunkSize = 4;
+            if( ReadFile(aFileHandle, &fileType, sizeof(DWORD), &dataRead, nullptr) == FALSE )
+            {
+                result = HRESULT_FROM_WIN32( GetLastError() );
+            }
+            break;
+
+            // otherwise just move the file pointer to the end of the chunk
+        default:
+            if( SetFilePointer(aFileHandle, chunkSize, NULL, FILE_CURRENT) == FALSE )
+            {
+                return false;
+            }
+            break;
+        }
+        currentOffset = sizeof(DWORD) * 2;
+
+        // check to see if we've found the chunk we're looking for
+        if( chunkType == aChunk )
+        {
+            aChunkSize      = chunkSize;
+            aChunkPosition  = currentOffset;
+
+            return true;
+        }
+
+        // move the current offset to the end of the chunk data
+        currentOffset += chunkSize;
+    }
+
+    return false;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+bool CWavFile::ReadChunkData( HANDLE aFileHandle, void* aBuffer, DWORD aBufferSize, DWORD aBufferOffset ) const
+{
+    HRESULT result = S_OK;
+    if( SetFilePointer(aFileHandle, aBufferOffset, NULL, FILE_BEGIN) == FALSE )
+    {
+        result = HRESULT_FROM_WIN32( GetLastError() );
+        return false;
+    }
+
+    DWORD dataRead = 0;
+    if( ReadFile(aFileHandle, aBuffer, aBufferSize, &dataRead, NULL) == FALSE )
+    {
+        result = HRESULT_FROM_WIN32( GetLastError() );
+        return false;
+    }
 
     return true;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-void CWavFile::SetWavData( const std::vector<short>& someSamples )
-{
-    if( m_wavData != nullptr )
-    {
-        delete m_wavData;
-    }
-
-    // set the number of samples in the .wav header
-    m_wavHeader.m_dataLength = (long)someSamples.size() * m_wavHeader.m_bytesPerSample;
-    m_wavHeader.m_fileLength = m_wavHeader.m_dataLength + 36; // 36 is header (44) minus RIFF & file length
-
-    // initialize the wav data and copy the supplied samples
-    m_wavData = new short[someSamples.size()];
-    std::copy( someSamples.begin(), someSamples.end(), m_wavData );
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-long CWavFile::GetSampleCount() const
-{
-    if( m_isValid )
-    {
-        return m_sampleCount;
-    }
-
-    return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-short CWavFile::GetSample( const long& anIndex ) const
-{
-    if( anIndex < m_sampleCount )
-    {
-        return m_wavData[anIndex];
-    }
-
-    return 0;
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-short& CWavFile::operator []( const long& anIndex )
-{
-    assert( anIndex < m_sampleCount );
-    return m_wavData[anIndex];
 }
 
 //////////////////////////////////////////////////////////////////////////

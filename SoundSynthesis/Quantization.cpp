@@ -5,7 +5,6 @@
 
 #include "stdafx.h"
 #include "Quantization.h"
-#include "WavFile.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -27,6 +26,7 @@ Quantization::~Quantization()
 
 bool Quantization::ProcessAudio( const char* anInputFile, const char* anOutputFile )
 {
+    /*
     CWavFile wavFile;
     if( !wavFile.Open(anInputFile) )
     {
@@ -54,6 +54,7 @@ bool Quantization::ProcessAudio( const char* anInputFile, const char* anOutputFi
 
     // save the output
     wavFile.Save( anOutputFile );
+    */
 
     return true;
 }

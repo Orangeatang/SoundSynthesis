@@ -5,7 +5,6 @@
 
 #include "stdafx.h"
 #include "PitchShift.h"
-#include "WavFile.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -38,6 +37,7 @@ CPitchShift::~CPitchShift()
 
 bool CPitchShift::ProcessAudio( const char* anInputFile, const char* anOutputFile )
 {
+    /*
 	CWavFile wavFile;
 	if (!wavFile.Open(anInputFile))
 	{
@@ -131,6 +131,7 @@ bool CPitchShift::ProcessAudio( const char* anInputFile, const char* anOutputFil
 
     wavFile.SetWavData( outputSamples );
     wavFile.Save( anOutputFile );
+    */
 
     return true;
 }
