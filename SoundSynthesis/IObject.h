@@ -4,6 +4,8 @@
 /// Includes
 //////////////////////////////////////////////////////////////////////////
 
+#include <rapidxml.hpp>
+
 
 //////////////////////////////////////////////////////////////////////////
 /// IObject
@@ -18,6 +20,17 @@ public :
 
     IObject();
     virtual ~IObject();
+
+    //////////////////////////////////////////////////////////////////////////
+
+    // coverts IObject instances to and from XML strings, uses ToXML & FromXML
+    const char*     Serialize() const;
+    bool            Deserialize( char* anXMLString );
+
+    // these functions should be overridden by base classes to write/read class property values from 
+    // the supplied xml document
+    virtual void    ToXML( rapidxml::xml_document<char>& aDocument ) const  = 0;
+    virtual bool    FromXML( rapidxml::xml_document<char>& aDocument )      = 0;
 
     //////////////////////////////////////////////////////////////////////////
 

@@ -1,0 +1,7 @@
+Communitaion Between C# & C++
+-----------------------------
+
+* serialize and deserialize C++ objects with XML
+* pass xml string between C++ and C#
+* C# populates a property grid with xml values
+* when a property is modified, xml string is generated and sent through to c++
