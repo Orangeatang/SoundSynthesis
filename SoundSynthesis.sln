@@ -6,11 +6,16 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundSynthesis", "SoundSynthesis\SoundSynthesis.vcxproj", "{7E65004A-C28A-4FB9-8166-DA17A2F931D4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SoundWave", "SoundWave\SoundWave.csproj", "{8C31BA32-2A9E-49A4-8323-6E78201BBDE5}"
+	ProjectSection(ProjectDependencies) = postProject
+		{7E65004A-C28A-4FB9-8166-DA17A2F931D4} = {7E65004A-C28A-4FB9-8166-DA17A2F931D4}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{199944FA-DD7B-47BB-A563-1F9E6C5DA5A4}"
 	ProjectSection(SolutionItems) = preProject
 		ToDo.txt = ToDo.txt
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SoundInterface", "SoundInterface\SoundInterface.vcxproj", "{09BB57D6-AC7D-41B2-AE6E-B9A369448609}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +31,10 @@ Global
 		{8C31BA32-2A9E-49A4-8323-6E78201BBDE5}.Debug|x64.Build.0 = Debug|x64
 		{8C31BA32-2A9E-49A4-8323-6E78201BBDE5}.Release|x64.ActiveCfg = Release|x64
 		{8C31BA32-2A9E-49A4-8323-6E78201BBDE5}.Release|x64.Build.0 = Release|x64
+		{09BB57D6-AC7D-41B2-AE6E-B9A369448609}.Debug|x64.ActiveCfg = Debug|x64
+		{09BB57D6-AC7D-41B2-AE6E-B9A369448609}.Debug|x64.Build.0 = Debug|x64
+		{09BB57D6-AC7D-41B2-AE6E-B9A369448609}.Release|x64.ActiveCfg = Release|x64
+		{09BB57D6-AC7D-41B2-AE6E-B9A369448609}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

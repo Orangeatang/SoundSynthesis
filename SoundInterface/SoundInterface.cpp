@@ -4,38 +4,38 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "SoundSynthesisInterface.h"
-#include "Engine.h"
-
-#include "Quantization.h"
-#include "PitchShift.h"
+#include "SoundInterface.h"
 #include "Helpers.h"
+
+#include <SoundSynthesis/Engine.h>
+#include <SoundSynthesis/Quantization.h>
+#include <SoundSynthesis/PitchShift.h>
 
 
 //////////////////////////////////////////////////////////////////////////
 /// SoundSynthesisInterface
 //////////////////////////////////////////////////////////////////////////
 
-SoundSynthesisInterface::SoundSynthesisInterface() :
+SoundInterface::SoundInterface() :
     myEngine( nullptr )
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-SoundSynthesisInterface::~SoundSynthesisInterface()
+SoundInterface::~SoundInterface()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-SoundSynthesisInterface::!SoundSynthesisInterface()
+SoundInterface::!SoundInterface()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool SoundSynthesisInterface::Initialise( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
+bool SoundInterface::Initialise( IntPtr aWindowHandle, int aWindowWidth, int aWindowHeight )
 {
     if( myEngine != nullptr )
     {
@@ -53,7 +53,7 @@ bool SoundSynthesisInterface::Initialise( IntPtr aWindowHandle, int aWindowWidth
 
 //////////////////////////////////////////////////////////////////////////
 
-void SoundSynthesisInterface::Uninitialise()
+void SoundInterface::Uninitialise()
 {
 	delete myEngine;
 	ourInstance = nullptr;
@@ -61,7 +61,7 @@ void SoundSynthesisInterface::Uninitialise()
 
 //////////////////////////////////////////////////////////////////////////
 
-void SoundSynthesisInterface::Update()
+void SoundInterface::Update()
 {
     if( !myEngine->IsInitialized() )
     {
@@ -73,7 +73,7 @@ void SoundSynthesisInterface::Update()
 
 //////////////////////////////////////////////////////////////////////////
 
-void SoundSynthesisInterface::QuantizeAudioFile( String^ anInputFileName, String^ anOutputFileName, int aSampleRate )
+void SoundInterface::QuantizeAudioFile( String^ anInputFileName, String^ anOutputFileName, int aSampleRate )
 {
     std::shared_ptr<Quantization> quantizer( new Quantization(aSampleRate) );
 
@@ -82,7 +82,7 @@ void SoundSynthesisInterface::QuantizeAudioFile( String^ anInputFileName, String
 
 //////////////////////////////////////////////////////////////////////////
 
-void SoundSynthesisInterface::PitchShiftAudioFile( String^ anInputFileName, String^ anOutputFileName, double aPitchShiftFactor )
+void SoundInterface::PitchShiftAudioFile( String^ anInputFileName, String^ anOutputFileName, double aPitchShiftFactor )
 {
     std::shared_ptr<CPitchShift> pitchShifter( new CPitchShift(aPitchShiftFactor) );
 

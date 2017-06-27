@@ -47,7 +47,7 @@ namespace SoundWave
         /// </summary>
         private void OnLoaded(object sender, RoutedEventArgs e)
         {
-            if( !SoundSynthesisInterface.Instance.Initialise(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
+            if( !SoundInterface.Instance.Initialise(myDXControl.Handle, (int)myDXControl.Width, (int)myDXControl.Height) )
             {
                 return;
             }
@@ -66,7 +66,7 @@ namespace SoundWave
         private void OnExit( object aSender, EventArgs someArges )
         {
             myTimer.Stop();
-            SoundSynthesisInterface.Instance.Uninitialise();
+            SoundInterface.Instance.Uninitialise();
 
             Application.Current.Shutdown( 0 );
         }
@@ -183,7 +183,7 @@ namespace SoundWave
 
         private void OnUpdateEngine(object aSender, ElapsedEventArgs someArgs)
         {
-            SoundSynthesisInterface.Instance.Update();
+            SoundInterface.Instance.Update();
         }
 
         #endregion

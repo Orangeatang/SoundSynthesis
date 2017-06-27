@@ -21,14 +21,14 @@ using namespace System;
 
 // SoundSynthesisInterface follows the singleton design pattern and is designed to provide
 // an interface between the C++ audio effects and C# user interface
-public ref class SoundSynthesisInterface
+public ref class SoundInterface
 {
 public :
 
     //////////////////////////////////////////////////////////////////////////
 
-    ~SoundSynthesisInterface();
-    !SoundSynthesisInterface();
+    ~SoundInterface();
+    !SoundInterface();
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -45,13 +45,13 @@ public :
     //////////////////////////////////////////////////////////////////////////
 
     // singleton accessor
-    static property SoundSynthesisInterface^ Instance
+    static property SoundInterface^ Instance
     {
-        SoundSynthesisInterface^ get()
+        SoundInterface^ get()
         {
             if( ourInstance == nullptr )
             {
-                ourInstance = gcnew SoundSynthesisInterface();
+                ourInstance = gcnew SoundInterface();
             }
 
             return ourInstance;
@@ -63,7 +63,7 @@ private :
 
     //////////////////////////////////////////////////////////////////////////
 
-    SoundSynthesisInterface();
+    SoundInterface();
 
     //////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +71,7 @@ private :
 
     //////////////////////////////////////////////////////////////////////////
 
-    static SoundSynthesisInterface^ ourInstance = nullptr;
+    static SoundInterface^ ourInstance = nullptr;
 };
 
 

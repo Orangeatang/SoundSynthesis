@@ -1,9 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Utilities">
-      <UniqueIdentifier>{5f36a63c-87be-44f2-aa4b-1e9a2c49b533}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Effects">
       <UniqueIdentifier>{835de5f1-4aa7-4a3d-9c0d-1910c20b2538}</UniqueIdentifier>
     </Filter>
@@ -33,12 +30,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SoundSynthesisInterface.h" />
     <ClInclude Include="Quantization.h">
       <Filter>Effects\Quantization</Filter>
-    </ClInclude>
-    <ClInclude Include="Helpers.h">
-      <Filter>Utilities</Filter>
     </ClInclude>
     <ClInclude Include="IEffect.h">
       <Filter>Effects</Filter>
@@ -75,12 +68,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="SoundSynthesisInterface.cpp" />
     <ClCompile Include="Quantization.cpp">
       <Filter>Effects\Quantization</Filter>
-    </ClCompile>
-    <ClCompile Include="Helpers.cpp">
-      <Filter>Utilities</Filter>
     </ClCompile>
     <ClCompile Include="PitchShift.cpp">
       <Filter>Effects\PitchShift</Filter>

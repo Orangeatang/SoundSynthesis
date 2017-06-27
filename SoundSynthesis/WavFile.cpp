@@ -38,7 +38,7 @@ CWavFile::~CWavFile()
 bool CWavFile::Load( const char* aFileName )
 {
     // create a file handle
-    const TCHAR* fileName = _TEXT(aFileName);
+    const TCHAR* fileName = _TEXT( aFileName );
 
     HANDLE fileHandle = CreateFile( fileName, GENERIC_READ, FILE_SHARE_READ, nullptr, OPEN_EXISTING, 0, nullptr );
     if( fileHandle == INVALID_HANDLE_VALUE )
