@@ -112,6 +112,7 @@
     </ClCompile>
     <Link>
       <AdditionalDependencies>SoundSynthesis.lib</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

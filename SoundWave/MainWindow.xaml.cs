@@ -1,14 +1,9 @@
 ﻿#region Using
 
 using System;
-using System.IO;
 using System.Timers;
 using System.Windows;
-using System.Windows.Interop;
-using System.Windows.Forms;
 using System.Windows.Threading;
-
-using SoundWave.MediaPlayer;
 
 #endregion
 
@@ -249,11 +244,7 @@ namespace SoundWave
 
         #region Private Member Variables
 
-        String      myInputFileName     = "";
-        String      myOutputFileName    = "";
-        Timer       myTimer             = null;
-
-        SoundPlayer mySoundPlayer;
+        Timer myTimer = null;
 
         #endregion
     }

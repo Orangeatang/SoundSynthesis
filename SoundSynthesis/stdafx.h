@@ -20,4 +20,8 @@
 #include <DirectXMath.h>
 #include <xaudio2.h>
 
+// directx libs
+#pragma comment( lib,"d3d11.lib" )
+#pragma comment( lib,"xaudio2.lib" )
+
 //////////////////////////////////////////////////////////////////////////
