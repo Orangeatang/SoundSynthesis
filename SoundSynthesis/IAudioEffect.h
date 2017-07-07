@@ -1,13 +1,6 @@
 #pragma once
 
 //////////////////////////////////////////////////////////////////////////
-/// Inculdes
-//////////////////////////////////////////////////////////////////////////
-
-#include "IObject.h"
-
-
-//////////////////////////////////////////////////////////////////////////
 /// Forward Declarations
 //////////////////////////////////////////////////////////////////////////
 
@@ -15,34 +8,44 @@ class CSoundSystem;
 
 
 //////////////////////////////////////////////////////////////////////////
-/// IAudioObject
+/// CAudioEffect
 //////////////////////////////////////////////////////////////////////////
 
-class IAudioObject : public IObject
+// processes audio data
+class IAudioEffect
 {
 public :
 
     //////////////////////////////////////////////////////////////////////////
 
-    IAudioObject( CSoundSystem* aSoundSystem, UINT32 someFlags = 0 );
-    virtual ~IAudioObject();
+    IAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags = 0, UINT32 aChannelCount = 1, UINT32 aSampleRate = 44000 );
+    virtual ~IAudioEffect();
 
     //////////////////////////////////////////////////////////////////////////
 
-    UINT32          GetVoiceFlags() const;
-    void            SetVoiceFlags( UINT32 someFlags );
+    IXAudio2SubmixVoice*    GetVoice() const;
+
+    UINT32                  GetChannelCount() const;
+    void                    SetChannelCount( UINT32 aChannelCount );
+
+    UINT32                  GetSampleRate() const;
+    void                    SetSampleRate( UINT32 aSampleRate );
 
 
 protected:
 
     //////////////////////////////////////////////////////////////////////////
 
-    virtual bool    CreateVoice() = 0;
+    bool                    CreateVoice();
 
     //////////////////////////////////////////////////////////////////////////
 
-    CSoundSystem* mySoundSystem;
-    UINT32        myVoiceFlags;
+    IXAudio2SubmixVoice*    myVoice;
+    UINT32                  myChannelCount;
+    UINT32                  mySampleRate;
+    UINT32                  myVoiceFlags;
+
+    CSoundSystem*           mySoundSystem;
 };
 
 //////////////////////////////////////////////////////////////////////////

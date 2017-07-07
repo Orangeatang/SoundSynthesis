@@ -94,10 +94,10 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AudioEffect.h" />
-    <ClInclude Include="AudioSource.h" />
+    <ClInclude Include="IAudioEffect.h" />
+    <ClInclude Include="IAudioSource.h" />
     <ClInclude Include="Engine.h" />
-    <ClInclude Include="IAudioObject.h" />
+    <ClInclude Include="AudioObject.h" />
     <ClInclude Include="IEffect.h" />
     <ClInclude Include="IObject.h" />
     <ClInclude Include="PitchShift.h" />
@@ -108,10 +108,10 @@
     <ClInclude Include="WavFile.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AudioEffect.cpp" />
-    <ClCompile Include="AudioSource.cpp" />
+    <ClCompile Include="IAudioEffect.cpp" />
+    <ClCompile Include="IAudioSource.cpp" />
     <ClCompile Include="Engine.cpp" />
-    <ClCompile Include="IAudioObject.cpp" />
+    <ClCompile Include="AudioObject.cpp" />
     <ClCompile Include="IObject.cpp" />
     <ClCompile Include="PitchShift.cpp" />
     <ClCompile Include="Quantization.cpp" />

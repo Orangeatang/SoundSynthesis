@@ -5,9 +5,7 @@
 
 #include "stdafx.h"
 #include "SoundSystem.h"
-
-#include "AudioSource.h"
-#include "AudioEffect.h"
+#include "AudioObject.h"
 
 
 //////////////////////////////////////////////////////////////////////////

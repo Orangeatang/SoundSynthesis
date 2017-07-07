@@ -4,14 +4,14 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "IAudioObject.h"
+#include "AudioObject.h"
 
 
 //////////////////////////////////////////////////////////////////////////
 /// IAudioObject
 //////////////////////////////////////////////////////////////////////////
 
-IAudioObject::IAudioObject( CSoundSystem* aSoundSystem, UINT32 someFlags ) : IObject(),
+CAudioObject::CAudioObject( CSoundSystem* aSoundSystem, UINT32 someFlags ) : IObject(),
     mySoundSystem( aSoundSystem ),
     myVoiceFlags( someFlags )
 {
@@ -20,20 +20,20 @@ IAudioObject::IAudioObject( CSoundSystem* aSoundSystem, UINT32 someFlags ) : IOb
 
 //////////////////////////////////////////////////////////////////////////
 
-IAudioObject::~IAudioObject()
+CAudioObject::~CAudioObject()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-UINT32 IAudioObject::GetVoiceFlags() const
+UINT32 CAudioObject::GetVoiceFlags() const
 {
     return myVoiceFlags;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void IAudioObject::SetVoiceFlags( UINT32 someFlags )
+void CAudioObject::SetVoiceFlags( UINT32 someFlags )
 {
     myVoiceFlags = someFlags;
 }

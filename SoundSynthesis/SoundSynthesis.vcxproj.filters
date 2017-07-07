@@ -22,11 +22,14 @@
     <Filter Include="Engine\Audio">
       <UniqueIdentifier>{fc3b5c1e-6d75-4ec4-a1d9-1cb3bf6f5c28}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Engine\Audio\Voices">
-      <UniqueIdentifier>{3147ceec-807c-4a99-b410-a8969b105b4c}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Engine\Audio\Sources">
       <UniqueIdentifier>{3cb2fd02-86c0-4296-9bb1-abcba5c13630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\Effects">
+      <UniqueIdentifier>{3147ceec-807c-4a99-b410-a8969b105b4c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine\Audio\Interfaces">
+      <UniqueIdentifier>{fa73c0e8-d5a4-4b4a-a235-ad266fe78dae}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -51,20 +54,20 @@
     <ClInclude Include="SoundSystem.h">
       <Filter>Engine\Audio</Filter>
     </ClInclude>
-    <ClInclude Include="AudioSource.h">
-      <Filter>Engine\Audio\Voices</Filter>
-    </ClInclude>
-    <ClInclude Include="AudioEffect.h">
-      <Filter>Engine\Audio\Voices</Filter>
-    </ClInclude>
     <ClInclude Include="IObject.h">
       <Filter>Engine</Filter>
     </ClInclude>
     <ClInclude Include="WavFile.h">
       <Filter>Engine\Audio\Sources</Filter>
     </ClInclude>
-    <ClInclude Include="IAudioObject.h">
+    <ClInclude Include="AudioObject.h">
       <Filter>Engine\Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioSource.h">
+      <Filter>Engine\Audio\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="IAudioEffect.h">
+      <Filter>Engine\Audio\Interfaces</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -86,20 +89,20 @@
     <ClCompile Include="SoundSystem.cpp">
       <Filter>Engine\Audio</Filter>
     </ClCompile>
-    <ClCompile Include="AudioSource.cpp">
-      <Filter>Engine\Audio\Voices</Filter>
-    </ClCompile>
-    <ClCompile Include="AudioEffect.cpp">
-      <Filter>Engine\Audio\Voices</Filter>
-    </ClCompile>
     <ClCompile Include="IObject.cpp">
       <Filter>Engine</Filter>
     </ClCompile>
     <ClCompile Include="WavFile.cpp">
       <Filter>Engine\Audio\Sources</Filter>
     </ClCompile>
-    <ClCompile Include="IAudioObject.cpp">
+    <ClCompile Include="AudioObject.cpp">
       <Filter>Engine\Audio</Filter>
+    </ClCompile>
+    <ClCompile Include="IAudioSource.cpp">
+      <Filter>Engine\Audio\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IAudioEffect.cpp">
+      <Filter>Engine\Audio\Interfaces</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

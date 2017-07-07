@@ -1,7 +1,26 @@
 Communitaion Between C# & C++
 -----------------------------
 
-* serialize and deserialize C++ objects with XML
-* pass xml string between C++ and C#
-* C# populates a property grid with xml values
-* when a property is modified, xml string is generated and sent through to c++
+* CLR representations for each type of audio object, holds an instance of said object
+	- objects are created using a factor
+	- pass sound system an enum to indicate which object you want to create
+	- clr class is a wrapper for the generated object
+	- c# displays clr class properties
+	- sound system maintains all audio object instances (created by the factory)
+
+Class Structure
+---------------
+
+AudioObject
+	- derives from IObject
+	- maintains a list of sources and effects
+
+IAudioSource
+	- audio source
+	- has an IXAudio2SourceVoice instance
+	- has an XAUDIO2_BUFFER
+	- has an WAVEFORMATEX instance
+	- sounds are triggered via the owning AudioObject
+
+IAudioEffect
+	- audio sound effect

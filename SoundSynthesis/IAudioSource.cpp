@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "AudioSource.h"
+#include "IAudioSource.h"
 #include "SoundSystem.h"
 
 
@@ -12,35 +12,58 @@
 /// CAudioSource
 //////////////////////////////////////////////////////////////////////////
 
-CAudioSource::CAudioSource( CSoundSystem* aSoundSystem, UINT32 someFlags ) : IAudioObject( aSoundSystem, someFlags ),
-    myVoice( nullptr )
+IAudioSource::IAudioSource( CSoundSystem* aSoundSystem, UINT32 someFlags ) :
+    mySoundSystem( aSoundSystem ),
+    myVoice( nullptr ),
+    myVoiceFlags( someFlags ),
+    myCanPlay( false ),
+    myIsPlaying( false )
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-CAudioSource::~CAudioSource()
+IAudioSource::~IAudioSource()
 {
     delete myAudioBuffer;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-IXAudio2SourceVoice* CAudioSource::GetVoice() const
+bool IAudioSource::Play()
+{
+    if( !myCanPlay )
+    {
+        return false;
+    }
+
+    // submit the source buffer using the voice
+    HRESULT result = myVoice->SubmitSourceBuffer( myAudioBuffer );
+    if( FAILED(result) )
+    {
+        return false;
+    }
+
+    return true;
+}
+
+//////////////////////////////////////////////////////////////////////////
+
+IXAudio2SourceVoice* IAudioSource::GetVoice() const
 {
     return myVoice;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-XAUDIO2_BUFFER* CAudioSource::GetBuffer() const
+XAUDIO2_BUFFER* IAudioSource::GetBuffer() const
 {
     return myAudioBuffer;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CAudioSource::InitializeBuffer( UINT32 aByteCount, UINT32 someFlags )
+void IAudioSource::InitializeBuffer( UINT32 aByteCount, UINT32 someFlags )
 {
     myAudioBuffer = new XAUDIO2_BUFFER();
     myAudioBuffer->AudioBytes   = aByteCount;
@@ -50,15 +73,23 @@ void CAudioSource::InitializeBuffer( UINT32 aByteCount, UINT32 someFlags )
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CAudioSource::CreateVoice()
+bool IAudioSource::CreateVoice()
 {
     IXAudio2* xaudio2 = mySoundSystem->GetInterface();
     assert( xaudio2 != nullptr );
 
+    // create the voice for the audio source
     HRESULT result = xaudio2->CreateSourceVoice( &myVoice, &myWaveFormat, myVoiceFlags );
     assert( result == S_OK );
 
-    return (result == S_OK);
+    // make sure the voice was successfully created, and indicate that the source is ready to play
+    if( result == S_OK )
+    {
+        myCanPlay = true;
+        return true;
+    }
+
+    return false;
 }
 
 //////////////////////////////////////////////////////////////////////////

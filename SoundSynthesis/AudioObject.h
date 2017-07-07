@@ -1,10 +1,10 @@
 #pragma once
 
 //////////////////////////////////////////////////////////////////////////
-/// Includes
+/// Inculdes
 //////////////////////////////////////////////////////////////////////////
 
-#include "IAudioObject.h"
+#include "IObject.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -15,41 +15,30 @@ class CSoundSystem;
 
 
 //////////////////////////////////////////////////////////////////////////
-/// CAudioEffect
+/// IAudioObject
 //////////////////////////////////////////////////////////////////////////
 
-// processes audio data
-class CAudioEffect : public IAudioObject
+class CAudioObject : public IObject
 {
 public :
 
     //////////////////////////////////////////////////////////////////////////
 
-    CAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags = 0, UINT32 aChannelCount = 1, UINT32 aSampleRate = 44000 );
-    virtual ~CAudioEffect();
+    CAudioObject( CSoundSystem* aSoundSystem, UINT32 someFlags = 0 );
+    virtual ~CAudioObject();
 
     //////////////////////////////////////////////////////////////////////////
 
-    IXAudio2SubmixVoice*    GetVoice() const;
-
-    UINT32                  GetChannelCount() const;
-    void                    SetChannelCount( UINT32 aChannelCount );
-
-    UINT32                  GetSampleRate() const;
-    void                    SetSampleRate( UINT32 aSampleRate );
+    UINT32          GetVoiceFlags() const;
+    void            SetVoiceFlags( UINT32 someFlags );
 
 
-protected:
+private:
 
     //////////////////////////////////////////////////////////////////////////
 
-    bool                    CreateVoice() override;
-
-    //////////////////////////////////////////////////////////////////////////
-
-    IXAudio2SubmixVoice*    myVoice;
-    UINT32                  myChannelCount;
-    UINT32                  mySampleRate;
+    CSoundSystem* mySoundSystem;
+    UINT32        myVoiceFlags;
 };
 
 //////////////////////////////////////////////////////////////////////////

@@ -4,7 +4,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "AudioEffect.h"
+#include "IAudioEffect.h"
 #include "SoundSystem.h"
 
 
@@ -12,57 +12,59 @@
 /// CAudioEffect
 //////////////////////////////////////////////////////////////////////////
 
-CAudioEffect::CAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags, UINT32 aChannelCount, UINT32 aSampleRate ) : IAudioObject( aSoundSystem, someFlags ),
+IAudioEffect::IAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags, UINT32 aChannelCount, UINT32 aSampleRate ) :
     myVoice( nullptr ),
     myChannelCount( aChannelCount ),
-    mySampleRate( aSampleRate )
+    mySampleRate( aSampleRate ),
+    myVoiceFlags( someFlags ),
+    mySoundSystem( aSoundSystem )
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-CAudioEffect::~CAudioEffect()
+IAudioEffect::~IAudioEffect()
 {
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-IXAudio2SubmixVoice* CAudioEffect::GetVoice() const
+IXAudio2SubmixVoice* IAudioEffect::GetVoice() const
 {
     return myVoice;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-UINT32 CAudioEffect::GetChannelCount() const
+UINT32 IAudioEffect::GetChannelCount() const
 {
     return myChannelCount;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CAudioEffect::SetChannelCount( UINT32 aChannelCount )
+void IAudioEffect::SetChannelCount( UINT32 aChannelCount )
 {
     myChannelCount = aChannelCount;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-UINT32 CAudioEffect::GetSampleRate() const
+UINT32 IAudioEffect::GetSampleRate() const
 {
     return mySampleRate;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-void CAudioEffect::SetSampleRate( UINT32 aSampleRate )
+void IAudioEffect::SetSampleRate( UINT32 aSampleRate )
 {
     mySampleRate = aSampleRate;
 }
 
 //////////////////////////////////////////////////////////////////////////
 
-bool CAudioEffect::CreateVoice()
+bool IAudioEffect::CreateVoice()
 {
     IXAudio2* xaudio2 = mySoundSystem->GetInterface();
     assert( xaudio2 != nullptr );

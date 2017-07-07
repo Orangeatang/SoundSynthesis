@@ -23,7 +23,7 @@
 /// CWavFile
 //////////////////////////////////////////////////////////////////////////
 
-CWavFile::CWavFile( CSoundSystem* aSoundSystem ) : CAudioSource( aSoundSystem )
+CWavFile::CWavFile( CSoundSystem* aSoundSystem ) : IAudioSource( aSoundSystem )
 {
 }
 

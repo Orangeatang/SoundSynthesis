@@ -4,8 +4,7 @@
 /// Forward Declarations
 //////////////////////////////////////////////////////////////////////////
 
-class CAudioSource;
-class CAudioEffect;
+class CAudioObject;
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -35,16 +34,14 @@ private :
 
     //////////////////////////////////////////////////////////////////////////
 
-    typedef std::vector<CAudioSource*> AudioSources;
-    typedef std::vector<CAudioEffect*> AudioEffects;
+    typedef std::vector<CAudioObject*> AudioObjects;
     
     //////////////////////////////////////////////////////////////////////////
 
     IXAudio2*               myAudioInterface;
     IXAudio2MasteringVoice* myMasteringVoice;
-
-    AudioSources            myAudioSources;
-    AudioEffects            myAudioEffects;
+    
+    AudioObjects            myAudioObjects;
 
     bool                    myInitialised;
 };
