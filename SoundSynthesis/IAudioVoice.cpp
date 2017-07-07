@@ -4,22 +4,16 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
-#include "AudioObject.h"
+#include "IAudioVoice.h"
 
 
 //////////////////////////////////////////////////////////////////////////
-/// IAudioObject
+/// IAudioVoice
 //////////////////////////////////////////////////////////////////////////
 
-CAudioObject::CAudioObject( CSoundSystem* aSoundSystem ) : IObject(),
-    mySoundSystem( aSoundSystem )
-{
-    assert( mySoundSystem != nullptr );
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-CAudioObject::~CAudioObject()
+IAudioVoice::IAudioVoice( CSoundSystem* aSoundSystem, UINT32 someVoiceFlags /* = 0 */ ) :
+    mySoundSystem( aSoundSystem ),
+    myVoiceFlags( someVoiceFlags )
 {
 }
 

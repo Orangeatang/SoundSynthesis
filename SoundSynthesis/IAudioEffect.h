@@ -1,10 +1,10 @@
 #pragma once
 
 //////////////////////////////////////////////////////////////////////////
-/// Forward Declarations
+/// Includes
 //////////////////////////////////////////////////////////////////////////
 
-class CSoundSystem;
+#include "IAudioVoice.h"
 
 
 //////////////////////////////////////////////////////////////////////////
@@ -12,7 +12,7 @@ class CSoundSystem;
 //////////////////////////////////////////////////////////////////////////
 
 // processes audio data
-class IAudioEffect
+class IAudioEffect : public IAudioVoice
 {
 public :
 
@@ -22,8 +22,6 @@ public :
     virtual ~IAudioEffect();
 
     //////////////////////////////////////////////////////////////////////////
-
-    IXAudio2SubmixVoice*    GetVoice() const;
 
     UINT32                  GetChannelCount() const;
     void                    SetChannelCount( UINT32 aChannelCount );
@@ -36,16 +34,14 @@ protected:
 
     //////////////////////////////////////////////////////////////////////////
 
-    bool                    CreateVoice();
+    bool                    CreateVoice() override;
+    void                    InitializeBuffer( UINT32 aByteCount, UINT32 someFlags ) override {}
 
     //////////////////////////////////////////////////////////////////////////
 
     IXAudio2SubmixVoice*    myVoice;
     UINT32                  myChannelCount;
     UINT32                  mySampleRate;
-    UINT32                  myVoiceFlags;
-
-    CSoundSystem*           mySoundSystem;
 };
 
 //////////////////////////////////////////////////////////////////////////

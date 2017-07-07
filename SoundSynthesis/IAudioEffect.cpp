@@ -12,12 +12,10 @@
 /// CAudioEffect
 //////////////////////////////////////////////////////////////////////////
 
-IAudioEffect::IAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags, UINT32 aChannelCount, UINT32 aSampleRate ) :
+IAudioEffect::IAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags, UINT32 aChannelCount, UINT32 aSampleRate ) : IAudioVoice( aSoundSystem, someFlags ),
     myVoice( nullptr ),
     myChannelCount( aChannelCount ),
-    mySampleRate( aSampleRate ),
-    myVoiceFlags( someFlags ),
-    mySoundSystem( aSoundSystem )
+    mySampleRate( aSampleRate )
 {
 }
 
@@ -25,13 +23,6 @@ IAudioEffect::IAudioEffect( CSoundSystem* aSoundSystem, UINT32 someFlags, UINT32
 
 IAudioEffect::~IAudioEffect()
 {
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-IXAudio2SubmixVoice* IAudioEffect::GetVoice() const
-{
-    return myVoice;
 }
 
 //////////////////////////////////////////////////////////////////////////

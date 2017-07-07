@@ -69,6 +69,9 @@
     <ClInclude Include="IAudioEffect.h">
       <Filter>Engine\Audio\Interfaces</Filter>
     </ClInclude>
+    <ClInclude Include="IAudioVoice.h">
+      <Filter>Engine\Audio\Interfaces</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Quantization.cpp">
@@ -102,6 +105,9 @@
       <Filter>Engine\Audio\Interfaces</Filter>
     </ClCompile>
     <ClCompile Include="IAudioEffect.cpp">
+      <Filter>Engine\Audio\Interfaces</Filter>
+    </ClCompile>
+    <ClCompile Include="IAudioVoice.cpp">
       <Filter>Engine\Audio\Interfaces</Filter>
     </ClCompile>
   </ItemGroup>

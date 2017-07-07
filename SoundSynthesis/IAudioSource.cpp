@@ -12,10 +12,8 @@
 /// CAudioSource
 //////////////////////////////////////////////////////////////////////////
 
-IAudioSource::IAudioSource( CSoundSystem* aSoundSystem, UINT32 someFlags ) :
-    mySoundSystem( aSoundSystem ),
+IAudioSource::IAudioSource( CSoundSystem* aSoundSystem, UINT32 someFlags ) : IAudioVoice( aSoundSystem, someFlags ),
     myVoice( nullptr ),
-    myVoiceFlags( someFlags ),
     myCanPlay( false ),
     myIsPlaying( false )
 {

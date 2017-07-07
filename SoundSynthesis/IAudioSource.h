@@ -1,17 +1,17 @@
 #pragma once
 
-/////////////////////////////////////////////////////////////////////
-/// Forward Declarations
+//////////////////////////////////////////////////////////////////////////
+/// Includes
 //////////////////////////////////////////////////////////////////////////
 
-class CSoundSystem;
+#include "IAudioVoice.h"
 
 
 //////////////////////////////////////////////////////////////////////////
 /// CAudioSource
 //////////////////////////////////////////////////////////////////////////
 
-class IAudioSource
+class IAudioSource : public IAudioVoice
 {
 public:
 
@@ -34,17 +34,14 @@ protected :
 
     //////////////////////////////////////////////////////////////////////////
 
-    void                    InitializeBuffer( UINT32 aByteCount, UINT32 someFlags );
-    virtual bool            CreateVoice();
+    void                    InitializeBuffer( UINT32 aByteCount, UINT32 someFlags ) override;
+    virtual bool            CreateVoice() override;
 
     //////////////////////////////////////////////////////////////////////////
 
     IXAudio2SourceVoice*    myVoice;
     XAUDIO2_BUFFER*         myAudioBuffer;
     WAVEFORMATEX            myWaveFormat;
-    UINT32                  myVoiceFlags;
-
-    CSoundSystem*           mySoundSystem;
 
     bool                    myCanPlay;
     bool                    myIsPlaying;
